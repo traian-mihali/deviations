@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <base href="https://traian-mihali.github.io/deviations/" />
+    <style>
+      body {
+        margin: 20px;
+        background-color: rgb(224, 225, 226);
+        color: rgb(23, 61, 23);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      }
+
+      #main {
+        display: grid;
+      }
+
+      #div-linear {
+        background-color: rgb(150, 170, 175);
+      }
+      #div-angular {
+        background-color: rgb(150, 185, 175);
+      }
+      #div-circular {
+        background-color: rgb(150, 200, 175);
+      }
+      #div-cylinder {
+        background-color: rgb(150, 215, 175);
+      }
+
+      h2,
+      span,
+      input,
+      button {
+        margin: 20px;
+        padding: 7px;
+      }
+
+      input,
+      button,
+      .result,
+      .error {
+        font-size: 15px;
+        border-radius: 5px;
+      }
+
+      input {
+        width: 100px;
+      }
+
+      @media (max-width: 700px) {
+        input,
+        span,
+        button {
+          margin: 10px;
+        }
+      }
+
+      @media (max-width: 550px) {
+        input,
+        span,
+        button {
+          margin: 5px;
+        }
+
+        .error {
+          display: block;
+        }
+      }
+    </style>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="main">
+      <div id="div-linear">
+        <h2>Linear Deviation</h2>
+        <input
+          id="linear"
+          type="text"
+          value=""
+          maxlength="6"
+          placeholder="Enter a value"
+        />
+        <button
+          onclick="calculate('linear', 'linear-res', 'linear-err', getLinearValue, getLinearScalingFactor)"
+        >
+          Calculate
+        </button>
+        <span class="result" id="linear-res"></span>
+        <span class="error" id="linear-err"></span>
+      </div>
+      <div id="div-angular">
+        <h2>Angular Deviation</h2>
+        <input
+          type="text"
+          id="angular"
+          value=""
+          maxlength="2"
+          placeholder="Enter a value"
+        />
+        <button
+          onclick="calculate('angular', 'angular-res', 'angular-err', getAngularValue, getAngularScalingFactor)"
+        >
+          Calculate
+        </button>
+        <span class="result" id="angular-res"></span>
+        <span class="error" id="angular-err"></span>
+      </div>
+      <div id="div-circular">
+        <h2>Circular Deviation</h2>
+        <input
+          id="circular"
+          type="text"
+          value=""
+          maxlength="6"
+          placeholder="Enter a value"
+        />
+        <button
+          onclick="calculate('circular', 'circular-res', 'circular-err', getCircularValue, getCircularScalingFactor)"
+        >
+          Calculate
+        </button>
+        <span class="result" id="circular-res"></span>
+        <span class="error" id="circular-err"></span>
+      </div>
+      <div id="div-cylinder">
+        <h2>Cylinder Hole</h2>
+        <input
+          id="cylinder"
+          type="text"
+          value=""
+          maxlength="6"
+          placeholder="Enter a value"
+        />
+        <button
+          onclick="calculate('cylinder', 'cylinder-res', 'cylinder-err', getCylinderValue, getCylinderScalingFactor)"
+        >
+          Calculate
+        </button>
+        <span class="result" id="cylinder-res"></span>
+        <span class="error" id="cylinder-err"></span>
+      </div>
+    </div>
+    <script>
+      function calculate(elem, result, error, getValue, getFactor) {
+        let element = document.getElementById(elem);
+        let res = document.getElementById(result);
+        let err = document.getElementById(error);
+        let x = element.value;
+
+        if (x === "") {
+          res.style.display = "none";
+          validateInput(err, "Please enter a number");
+          return;
+        }
+
+        if (x <= 0 || typeof +x !== "number" || isNaN(x)) {
+          res.style.display = "none";
+          validateInput(err, "Value must be a positive number");
+          return;
+        }
+
+        let value = getValue(x);
+        let factor = getFactor(x);
+        res.style.display = "inline-block";
+        err.style.display = "none";
+        res.innerText = `${value} CAD dimension and ${factor}% scaling factor`;
+        res.style.backgroundColor = "white";
+        element.value = "";
+      }
+
+      function validateInput(elem, message) {
+        elem.style.display = "inline-block";
+        elem.innerText = message;
+        elem.style.backgroundColor = "hsla(290,60%,70%,0.3)";
+        elem.style.color = "hsla(290,60%,30%,1)";
+      }
+
+      function getLinearValue(x) {
+        return (1.0041 * x + 0.0162).toFixed(3);
+      }
+      function getLinearScalingFactor(x) {
+        return ((1.0041 * x + 0.0162) / x).toFixed(3);
+      }
+
+      function getAngularValue(x) {
+        return (1.0064 * x - 0.4396).toFixed(3);
+      }
+      function getAngularScalingFactor(x) {
+        return ((1.0064 * x - 0.4396) / x).toFixed(3);
+      }
+
+      function getCircularValue(x) {
+        return (1.0125 * x - 0.0243).toFixed(3);
+      }
+      function getCircularScalingFactor(x) {
+        return ((1.0125 * x - 0.0243) / x).toFixed(3);
+      }
+
+      function getCylinderValue(x) {
+        return (0.981 * x + 0.8341).toFixed(3);
+      }
+      function getCylinderScalingFactor(x) {
+        return ((0.981 * x + 0.8341) / x).toFixed(3);
+      }
+    </script>
+  </body>
+</html>
